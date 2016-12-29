@@ -1,0 +1,5 @@
+*.pyc
+dist/*
+django_chartjs_engine.egg-info/*
+db.sqlite3
+

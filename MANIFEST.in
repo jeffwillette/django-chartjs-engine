@@ -1,0 +1,3 @@
+include chartjs_engine/*
+include chartjs_engine/templates/chartjs_engine/*
+include chartjs_engine/views/*

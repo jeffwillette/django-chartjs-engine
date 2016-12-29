@@ -1,0 +1,12 @@
+language: python
+python:
+  - "2.7"
+
+before_script:
+  - pip install python-coveralls
+
+script:
+  - coverage run --source=chartjs_engine manage.py test chartjs_engine
+
+after_success:
+  - coveralls

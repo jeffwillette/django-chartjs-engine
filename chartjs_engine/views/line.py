@@ -12,9 +12,8 @@ class LineChart(Chart):
 	DOCS: http://www.chartjs.org/docs/#line-chart-introduction
 	"""
 
-	def render_template(self):
-		"""Generating the javascript needed for a line chart."""
-
+	def get_options(self):
+		"""Gets the options for the chart"""
 		self.options = {
 			'scales': {
 				'yAxes': [{
@@ -24,11 +23,13 @@ class LineChart(Chart):
 				}]
 			}
 		}
+		return self.options
 
-		self.data = {
-			'labels': self.chart_labels,
-			'datasets': []
-		}
+	def get_data(self):
+		"""Populating self.data with self.datasets"""
+
+		# self.data['labels'] already set in the Chart base class
+		self.data['datasets'] = []
 		self.colors = [self.random_color() for sets in self.datasets]
 
 		for i, name in enumerate(self.datasets):
@@ -54,12 +55,23 @@ class LineChart(Chart):
 				'borderColor': self.colors[i][1],
 				'data': self.datasets[name],
 			})
+		return self.data
 
+	def make_context(self):
+		"""Making the context to be returned to the render functions"""
 		self.context = {
 			'chart_type': self.chart_type,
 			'chart_name': self.chart_name,
 			'data': json.dumps(self.data),
 			'options': json.dumps(self.options)
 		}
+		return self.context
 
+
+	def to_string(self):
+		"""Generating the javascript needed for a line chart."""
+
+		self.get_options()
+		self.get_data()
+		self.make_context()
 		return render_to_string('chartjs_engine/chart.html', self.context)

@@ -12,7 +12,7 @@ import random
 
 
 
-class Chart():
+class Chart(object):
 	"""A base class for charts, init will store all the data needed for subclasses"""
 
 	def __init__(self, chart_type=None, chart_name=None, options=None, \
@@ -21,14 +21,15 @@ class Chart():
 		Setting all of the settings that will be needed in the charts subclasses
 		"""
 		self.chart_type = chart_type
-		self.chart_labels = chart_labels
+		# datasets will be put into self.data in each charts get_data method
 		self.datasets = datasets
 		self.chart_name = chart_name
 		self.options = options
+		self.data = {'labels': chart_labels,}
 		# Figure out how to access the kwargs as a list and make sure none of them
 		# are None. Raise exception if they are and test.
-		if not all([self.chart_type, self.chart_name, self.options, \
-			self.chart_labels, self.datasets]):
+		if not all([self.chart_type, self.chart_name, self.data['labels'], \
+			self.datasets]):
 			raise Exception(
 				"Chart class needs to have all keyword arguments specified")
 
@@ -44,11 +45,11 @@ class Chart():
 			"rgba(%s, %s, %s, 1)" % (red, green, blue))
 
 
-	def render_template(self):
+	def to_string(self):
 		"""
 		This method is meant to be overridden in the child chart type classes
 		"""
-		raise Exception("make_js method has not been overridden")
+		raise Exception("to_string method has not been overridden")
 
 
 '''

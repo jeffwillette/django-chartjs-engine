@@ -31,4 +31,4 @@ class ChartEngine(object):
 
 	def make_chart(self):
 		"""Render the proper chart from the given"""
-		return self.chart.render_template()
+		return self.chart.to_string()

@@ -13,7 +13,7 @@ pip install django-chartjs-engine
 
 settings.py
 
-```python
+```
 INSTALLED_APPS = [
     ...
     'chartjs_engine',
@@ -21,3 +21,9 @@ INSTALLED_APPS = [
 ```
 
 ## Pass data to the Engine
+
+## TODO:
+
+1. make the chart render both responses and to string based on function call (how is this going to work?)
+2. make sure everything works on local jrwillete before pushing
+3. split up functions of the chart classes (make other files like bar.py)

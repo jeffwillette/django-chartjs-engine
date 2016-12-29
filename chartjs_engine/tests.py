@@ -48,14 +48,34 @@ class LineChartTests(TestCase):
 		self.chart = LineChart(
 			chart_type='line',
 			chart_name='the_chart',
-			options={'options': 'options'},
 			chart_labels=['the', 'labels'],
 			datasets={'data': (1, 2), 'data2': (3, 4)})
+
+	def test_get_options(self):
+		"""Testing the get options method"""
+		self.assertFalse(self.chart.options)
+		options = self.chart.get_options()
+		self.assertTrue(options)
+
+	def test_get_data(self):
+		"""Testing that get data returns everything equal to the input"""
+		data = self.chart.get_data()
+		keys = ['label', 'backgroundColor', 'borderColor', 'data']
+		for k in keys:
+			for d in data['datasets']:
+				self.assertTrue(d[k])
+
+	def test_make_context(self):
+		"""Testing that context returns"""
+		context = self.chart.make_context()
+		keys = ['chart_type', 'chart_name', 'data', 'options']
+		for k in keys:
+			self.assertTrue(context[k])
 
 	@patch('chartjs_engine.views.line.render_to_string')
 	def test_render_template_method(self, mock_rts):
 		"""Testing that everything has rendered correctly 'rts' is render_to_string"""
-		chart = self.chart.render_template()
+		chart = self.chart.to_string()
 		mock_rts.assert_called()
 
 
@@ -65,24 +85,51 @@ class BarChartTests(TestCase):
 
 	def setUp(self):
 		"""Setting up the options for a bar chart"""
+
+		self.chart_type = 'bar'
+		self.chart_name = 'the_chart'
+		self.chart_labels = ['the', 'labels']
+		self.datasets = {'data': (1, 2), 'data2': (3, 4)}
+		# For testing bar chart behavior with single dataset
+		self.datasets2 = {'data': (1, 2)}
+
 		self.chart = BarChart(
-			chart_type='bar',
-			chart_name='the_chart',
-			options={'options': 'options'},
-			chart_labels=['the', 'labels'],
-			datasets={'data': (1, 2), 'data2': (3, 4)})
+			chart_type=self.chart_type,
+			chart_name=self.chart_name,
+			chart_labels=self.chart_labels,
+			datasets=self.datasets)
 
 		self.single_dataset_chart = BarChart(
-			chart_type='bar',
-			chart_name='the_chart',
-			options={'options': 'options'},
-			chart_labels=['the', 'labels'],
-			datasets={'data': (1, 2)})
+			chart_type=self.chart_type,
+			chart_name=self.chart_name,
+			chart_labels=self.chart_labels,
+			datasets=self.datasets2)
+
+	def test_get_options(self):
+		"""Testing the get options method"""
+		self.assertFalse(self.chart.options)
+		options = self.chart.get_options()
+		self.assertTrue(options)
+
+	def test_get_data(self):
+		"""Testing that get data returns everything equal to the input"""
+		data = self.chart.get_data()
+		keys = ['label', 'backgroundColor', 'borderColor', 'borderWidth', 'data']
+		for k in keys:
+			for d in data['datasets']:
+				self.assertTrue(d[k])
+
+	def test_make_context(self):
+		"""Testing that context returns"""
+		context = self.chart.make_context()
+		keys = ['chart_type', 'chart_name', 'data', 'options']
+		for k in keys:
+			self.assertTrue(context[k])
 
 	@patch('chartjs_engine.views.bar.render_to_string')
-	def test_render_template_method(self, mock_rts):
+	def test_to_string_method(self, mock_rts):
 		"""Testing rendering the bar chart to a template"""
-		chart = self.chart.render_template()
+		chart = self.chart.to_string()
 		mock_rts.assert_called()
 
 	def test_one_color_if_multiple_datasets(self):
@@ -90,14 +137,14 @@ class BarChartTests(TestCase):
 		Testing that there will be one color per dataset when multiple datasets
 		are present
 		"""
-		chart = self.chart.render_template()
+		chart = self.chart.to_string()
 		for ds in self.chart.data['datasets']:
 			self.assertEqual(ds['backgroundColor'][0], ds['backgroundColor'][1])
 			self.assertEqual(ds['borderColor'][0], ds['borderColor'][1])
 
 	def test_multiple_colors_if_one_dataset(self):
 		"""Testing that there will be multiple colors if there is only one dataset"""
-		chart = self.single_dataset_chart.render_template()
+		chart = self.single_dataset_chart.to_string()
 		for ds in self.single_dataset_chart.data['datasets']:
 			self.assertNotEqual(ds['backgroundColor'][0], ds['backgroundColor'][1])
 			self.assertNotEqual(ds['borderColor'][0], ds['borderColor'][1])
@@ -112,41 +159,58 @@ class PieDoughnutChartTests(TestCase):
 		self.chart = PieDoughnutChart(
 			chart_type='pie',
 			chart_name='the_chart',
-			options={'options': 'options'},
 			chart_labels=['the', 'labels'],
 			datasets={'data': (1, 2), 'data2': (3, 4)})
 
 		self.doughnut_chart = PieDoughnutChart(
 			chart_type='doughnut',
 			chart_name='the_chart',
-			options={'options': 'options'},
 			chart_labels=['the', 'labels'],
 			datasets={'data': (1, 2)})
 
 		self.single_dataset_chart = PieDoughnutChart(
 			chart_type='pie',
 			chart_name='the_chart',
-			options={'options': 'options'},
 			chart_labels=['the', 'labels'],
 			datasets={'data': (1, 2)})
+
+	def test_get_options(self):
+		"""Testing the get options method"""
+		self.assertFalse(self.chart.options)
+		options = self.chart.get_options()
+		self.assertFalse(options)
+
+	def test_get_data(self):
+		"""Testing that get data returns everything equal to the input"""
+		data = self.single_dataset_chart.get_data()
+		keys = ['label', 'backgroundColor', 'hoverBackgroundColor', 'data']
+		for k in keys:
+			for d in data['datasets']:
+				self.assertTrue(d[k])
+
+	def test_make_context(self):
+		"""Testing that context returns"""
+		context = self.chart.make_context()
+		keys = ['chart_type', 'chart_name', 'data', 'options']
+		for k in keys:
+			self.assertTrue(context[k])
 
 	@patch('chartjs_engine.views.pie_doughnut.render_to_string')
 	def test_one_dataset_returns_chart(self, mock_rts):
 		"""Testing that one dataset will return a chart"""
-		chart = self.single_dataset_chart.render_template()
+		chart = self.single_dataset_chart.to_string()
 		mock_rts.assert_called()
 
 	@patch('chartjs_engine.views.pie_doughnut.render_to_string')
 	def test_doughnut_chart_returns_chart(self, mock_rts):
 		"""Testing that passing in settings for doughnut chart returns a chart"""
-		chart = self.doughnut_chart.render_template()
+		chart = self.doughnut_chart.to_string()
 		mock_rts.assert_called()
 
 	def test_two_dataset_returns_error_as_string(self):
 		"""Testing that two datasets will return an error as a string."""
-		chart = self.chart.render_template()
-		self.assertEqual(chart, self.chart.error)
-
+		with self.assertRaises(Exception):
+			self.chart.to_string()
 
 
 class ChartEngineTests(TestCase):

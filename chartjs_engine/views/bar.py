@@ -12,9 +12,8 @@ class BarChart(Chart):
 	DOCS: http://www.chartjs.org/docs/#bar-chart-introduction
 	"""
 
-	def render_template(self):
-		"""Rendering bar chart data to a template"""
-
+	def get_options(self):
+		"""Gets the options for the chart"""
 		self.options = {
 			'scales': {
 				'yAxes': [{
@@ -24,11 +23,13 @@ class BarChart(Chart):
 				}]
 			}
 		}
+		return self.options
 
-		self.data = {
-			'labels': self.chart_labels,
-			'datasets': []
-		}
+	def get_data(self):
+		"""Populating self.data with self.datasets"""
+
+		# self.data['labels'] already set in the Chart base class
+		self.data['datasets'] = []
 
 		for i, name in enumerate(self.datasets):
 
@@ -48,12 +49,21 @@ class BarChart(Chart):
 				'borderWidth': 3,
 				'data': self.datasets[name],
 			})
+		return self.data
 
+	def make_context(self):
+		"""Making the context to be returned to the render functions"""
 		self.context = {
 			'chart_type': self.chart_type,
 			'chart_name': self.chart_name,
 			'data': json.dumps(self.data),
 			'options': json.dumps(self.options)
 		}
+		return self.context
 
+	def to_string(self):
+		"""Rendering bar chart data to a template, returning string"""
+		self.get_options()
+		self.get_data()
+		self.make_context()
 		return render_to_string('chartjs_engine/chart.html', self.context)

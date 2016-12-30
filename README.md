@@ -1,3 +1,7 @@
+[![Build Status](https://travis-ci.org/deltaskelta/django-chartjs-engine.svg?branch=master)](https://travis-ci.org/deltaskelta/django-chartjs-engine)
+
+[![Coverage Status](https://coveralls.io/repos/github/deltaskelta/django-chartjs-engine/badge.svg?branch=master)](https://coveralls.io/github/deltaskelta/django-chartjs-engine?branch=master)
+
 ## Chartjs_engine
 
 `chartjs_engine` aims to provide a django app that will produce [chartjs](http://www.chartjs.org/)

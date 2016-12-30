@@ -1,8 +1,8 @@
 {% load static %}
 
-<!-- Is there a way to make this only load once on the chart pages? Right now it loads
-twice, once on each chart. -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.bundle.min.js"></script>
+<!-- The chartjs library should already be loaded somewhere else in your HTML, if it has not been
+	loaded anywhere else, then place it below -->
+
 <canvas id="{{ chart_name }}" width="400" height="150"></canvas>
 
 <script>

@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='django-chartjs-engine',
-      version='0.0.1',
+      version='0.0.3',
       description='Django app to build chartjs javascript charts',
       url='https://github.com/deltaskelta/django-chartjs_engine',
       author='Jeff Willette',

@@ -30,13 +30,23 @@ INSTALLED_APPS = [
     ...
     'chartjs_engine',
 ]
+
+CHARTJS_SCRIPT = CHARTJS_SCRIPT = '<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.bundle.min.js"></script>'
 ```
+
+You must also add the `chartjs` script to your html file somewhere. It has been excluded from the
+template in order to allow it to be loaded exactly once. (Each page may have multiple charts, and
+ if it was included in the template it would load once for every chart)
+
+In order to include it in the response, it is best to put the script source in settings and then
+ add it to the response later.
 
 ## Method 1: Pass data to the Engine And Return Chart as Response
 
 ```python
 from django.http import HttpResponse
 from chartjs_engine.views.engine import Engine
+from django.conf import settings
 
 
 def chart_view(request):
@@ -55,7 +65,7 @@ def chart_view(request):
 
     engine = ChartEngine(**chart_setup)
     chart = engine.make_chart()
-    return HttpResponse(chart)
+    return HttpResponse(settings.CHARTJS_SCRIPT + chart)
 ```
 
 ## Method 2: Creating Custom Markup on a Database Object
@@ -90,6 +100,9 @@ class BlogPost(models.Model):
 		pattern = settings.CHARTJS_REGEX
 		#Finding all the chartjs markup and iterating to parse each one
 		markup_data = re.findall(pattern, self.post)
+		if markup_data:
+		    # Adding the chartjs javascript library (exactly once) to the html
+		    self.post = settings.CHARTJS_SCRIPT + self.post
 		for data in markup_data:
 			# Regex captures the "[chartsjs]" tags, omitting them...
 			data = data.split('\r\n')[1:-1]

@@ -13,7 +13,7 @@ a regular view.
 
 ## Install
 
-```
+```python
 pip install django-chartjs-engine
 ```
 
@@ -21,7 +21,7 @@ pip install django-chartjs-engine
 
 settings.py
 
-```
+```python
 INSTALLED_APPS = [
     ...
     'chartjs_engine',
@@ -30,7 +30,7 @@ INSTALLED_APPS = [
 
 ## Method 1: Pass data to the Engine And Return Chart as Response
 
-```
+```python
 from django.http import HttpResponse
 from chartjs_engine.views.engine import Engine
 
@@ -61,15 +61,15 @@ custom markup which can be substituted for chart html when the view is loaded.
 
 #### Example:
 
-settings.py
-```
+##### settings.py
+```python
 CHARTJS_REGEX = re.compile(r'(\[chartjs\].*?\[/chartjs\])', re.DOTALL)
 ```
 
 The above regular expression will capture everything in between and including `[chartjs]` and `[/chartjs]` tags in the database.
 
-models.py
-```
+##### models.py
+```python
 class BlogPost(models.Model):
 	"""A model that has everything needed for a blogpost"""
 

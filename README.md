@@ -12,8 +12,9 @@ have.
 If you have a blog app, you could write a model method that scans for custom chart markup and
 then inserts the html.
 
-If you wish to create a chart based on django querysets, outside API calls, or anything else, just gather your data in a django view and pass it to the chart engine which can then be returned like
-a regular view.
+If you wish to create a chart based on django querysets, outside API calls, or anything
+else, just gather your data in a django view and pass it to the chart engine which can
+then be returned like a regular view.
 
 ## Install
 
@@ -31,12 +32,13 @@ INSTALLED_APPS = [
     'chartjs_engine',
 ]
 
-CHARTJS_SCRIPT = CHARTJS_SCRIPT = '<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.bundle.min.js"></script>'
+CHARTJS_SCRIPT = '<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.bundle.min.js"></script>'
 ```
 
-You must also add the `chartjs` script to your html file somewhere. It has been excluded from the
-template in order to allow it to be loaded exactly once. (Each page may have multiple charts, and
- if it was included in the template it would load once for every chart)
+You must also add the `chartjs` script to your html file somewhere. It has been
+excluded from the template in order to allow it to be loaded exactly once. (Each
+page may have multiple charts, and if it was included in the template it would load
+once for every chart)
 
 In order to include it in the response, it is best to put the script source in settings and then
  add it to the response later.
@@ -70,8 +72,9 @@ def chart_view(request):
 
 ## Method 2: Creating Custom Markup on a Database Object
 
-If you have a database object which is returned in a response (like a blog post) you can make some
-custom markup which can be substituted for chart html when the view is loaded.
+If you have a database object which is returned in a response (like a blog post)
+you can make some custom markup which can be substituted for chart html when the
+view is loaded.
 
 #### Example:
 
@@ -80,7 +83,21 @@ custom markup which can be substituted for chart html when the view is loaded.
 CHARTJS_REGEX = re.compile(r'(\[chartjs\].*?\[/chartjs\])', re.DOTALL)
 ```
 
-The above regular expression will capture everything in between and including `[chartjs]` and `[/chartjs]` tags in the database.
+The above regular expression will capture everything in between and including
+`[chartjs]` and `[/chartjs]` tags in the database.
+
+Then, with the following model method, you could turn some markup (like the example
+below into a chartjs javascript chart...
+
+```
+[chartjs]
+name: testchart
+type: line
+labels: the, labels
+data-foo: 1, 2
+data-bar: 3, 4
+[/chartjs]
+```
 
 ##### models.py
 ```python

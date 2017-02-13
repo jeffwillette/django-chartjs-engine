@@ -3,7 +3,7 @@ from setuptools import setup
 setup(name='django-chartjs-engine',
       version='0.0.3',
       description='Django app to build chartjs javascript charts',
-      url='https://github.com/deltaskelta/django-chartjs_engine',
+      url='https://github.com/deltaskelta/django-chartjs-engine',
       author='Jeff Willette',
       author_email='jrwillette88@gmail.com',
       keywords = ['django', 'chartjs', 'javascript', 'charts'],

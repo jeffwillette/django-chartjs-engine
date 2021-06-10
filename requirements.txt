@@ -1,4 +1,4 @@
-Django==1.10.4
+Django==2.2.24
 funcsigs==1.0.2
 mock==2.0.0
 pbr==1.10.0
